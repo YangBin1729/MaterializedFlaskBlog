@@ -1,0 +1,131 @@
+{% block doc -%}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+    <head>
+    {%- block head %}
+    <title>{% block title %}{{title|default}}{% endblock title %}</title>
+
+    {%- block metas %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock metas %}
+
+    {%- block styles %}
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link href="{{ url_for('static', filename='css/materialize.css') }}" rel="stylesheet">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    {%- endblock styles %}
+    {%- endblock head %}
+    </head>
+<body{% block body_attribs %}{% endblock body_attribs %}>
+{% block body -%}
+    {% block navbar %}
+    <header>
+        <!-- LoggedUser Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a href="{{ url_for('auth.change_password') }}">修改密码</a></li>
+            <li><a href="{{ url_for('auth.password_reset_request') }}">重置密码</a></li>
+            <li><a href="{{ url_for('auth.change_email_request') }}">修改邮箱</a></li>
+            <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
+        </ul>
+
+        <nav class="top-nav">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="{{ url_for('main.index') }}" class="brand-logo"><i class="material-icons">cloud</i>MFlask</a>
+                    <ul class="right hide-on-med-and-down">
+                        {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+                        <!-- LoggedUser Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="" data-target="dropdown1">设置<i class="material-icons right">arrow_drop_down</i></a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('auth.register') }}"><i class="material-icons left">view_module</i>注册</a></li>
+                        <li><a href="{{ url_for('auth.login') }}"><i class="material-icons left">view_module</i>登录</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <ul class="sidenav sidenav-fixed">
+            <li>
+                <div class="user-view">
+                    <div class="background">
+                        <img src="{{ url_for('static', filename='images/bg.jpg') }}" alt="MaterializedFlask">
+                    </div>
+                    {% if current_user.is_authenticated %}
+                    <a href="#"><img class="circle" src="{{ current_user.gravatar(size=120) }}"></a>
+                    <a href="#"><span class="flow-text name">{{ current_user.username }}</span></a>
+                    <a href="#"><span class="flow-text email">{{ current_user.role.name }}</span></a>
+                    {% else %}
+                    <a href="#"><img class="circle" src="{{ url_for('static', filename='images/profile-128.png') }}"></a>
+                    <a href="#"><span class="white-text name">Guest</span></a>
+                    <a href="#"><span class="white-text email">Welcome!</span></a>
+                    {% endif %}
+                </div>
+            </li>
+            <li class="bold active"><a href="{{ url_for('main.index') }}"><i class="material-icons">home</i>首页</a></li>
+
+            {% if current_user.is_authenticated %}
+            <li class="bold"><a href="{{ url_for('main.mines') }}"><i class="material-icons">person</i>我的</a></li>
+
+            <li class="bold"><a href="{{ url_for('main.updates') }}"><i class="material-icons">refresh</i>动态</a></li>
+
+            {% endif %}
+        </ul>
+    </header>
+    {%- endblock navbar %}
+
+    {% block content -%}
+
+    {%- endblock content %}
+
+    {% block footer %}
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col l4 s12 center">
+                    <h5 class="white-text">相关网站</h5>
+                    <ul>
+                        <li><a class="white-text" target="_blank" href="http://www.okgoes.com">完美起航</a></li>
+                    </ul>
+                </div>
+
+                <div class="col l4 s12 center">
+                    <h5 class="white-text">学习交流</h5>
+                </div>
+
+                <div class="col l4 s12 center" style="overflow: hidden;">
+                    <h5 class="white-text">联系我们</h5>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2014-2016 Materialize, All rights reserved.
+                <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT License</a>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/jquery-3.4.0.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/materialize.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    {{ moment.include_moment() }}
+    {%- endblock scripts %}
+{%- endblock body %}
+</body>
+{%- endblock html %}
+</html>
+{% endblock doc -%}

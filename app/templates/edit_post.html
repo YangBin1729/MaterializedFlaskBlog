@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}MaterializedFlask - Edit Post{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12 center">
+                <h1>Edit Post!</h1>
+                <p>The local date and time is {{ moment(current_time).format('LLL') }}.</p>
+                <p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
+            </div>
+
+            <form class="col s12" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">edit</i>
+                        {{ form.body(class='materialize-textarea') }}
+                        {{ form.body.label }}
+                        {% for error in form.body.errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="row right">
+                    <div class="input-field col s12">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">
+                            确定<i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}

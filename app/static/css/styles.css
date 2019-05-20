@@ -1,0 +1,131 @@
+/*整体布局*/
+header, main, footer {
+    padding-left: 240px;
+}
+.container {
+    width: 85%;
+}
+
+@media only screen and (max-width : 992px) {
+    header, main, footer {
+    padding-left: 0;
+    }
+}
+
+/*顶部导航*/
+.top-nav {
+    height: 60px;
+}
+
+
+/*侧边导航*/
+.sidenav {
+    width: 240px;
+
+}
+
+
+/*粘性页脚*/
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+
+/*文章区域*/
+div.post-card {
+    padding: 24px 24px 2px 24px;
+}
+
+div.post-thumbnail {
+    position: absolute;
+    top:32px;
+}
+div.post-content {
+    padding-left: 56px;
+}
+div.post-content div{
+    padding-bottom: 6px;
+}
+
+
+div.post-author {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+div.post-body {
+    font-size: 1.2em;
+}
+
+div.post-footer {
+    border-top: 1px solid #eeeeee;
+    margin-top: 8px;
+}
+
+div.post-footer ul {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+div.post-footer a{
+}
+
+div.post-footer .waves-effect {
+    background-color: #fff;
+    color: #212121
+  }
+
+
+
+/*表单*/
+form .row {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+/*个人信息区*/
+div.profile-card {
+    padding: 24px 8px 2px 24px;
+}
+
+div.profile-card img{
+    position: absolute;
+    top: 24px
+}
+
+div.profile-card p {
+    margin-left: 148px;
+    font-size: 1.4em;
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 0px;
+    margin-bottom: 6px;
+}
+
+div.profile-card table {
+
+    margin-left: 148px ;
+}
+
+table tr {
+    border: none;
+}
+table th,td {
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
+.modal {
+    max-height: 40%;
+    width: 35%;
+}
+
+
+
+

@@ -1,0 +1,69 @@
+<div class="card post-card">
+    <div class="post-thumbnail">
+        <a href="{{ url_for('.user', username=post.author.username) }}">
+            <img class="profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+        </a>
+    </div>
+    <div class="post-content">
+        <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+        <div class="post-date">{{ moment(post.timestamp).fromNow() }}</div>
+        <div class="post-body">{{ post.body }}</div>
+    </div>
+    <div class="post-footer">
+        <ul class="">
+            <a class="waves-effect waves-teal btn-small btn-flat" href="{{ url_for('.post', id=post.id) }}">
+                <i class="material-icons">launch</i>
+            </a>
+            {% if current_user == post.author %}
+            <a class="waves-effect waves-teal btn-small btn-flat" href="{{ url_for('.edit', id=post.id) }}">
+                <i class="material-icons">edit</i>
+            </a>
+            <a class="waves-effect waves-teal btn-small btn-flat modal-trigger" href="#delete-post" >
+                <i class="material-icons">delete</i>
+            </a>
+            <div class="modal" id="delete-post">
+                <div class="modal-content">
+                    <p>是否确定删除该文章</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-teal btn">取消</a>
+                    <a id="confirm-delete-post" class="modal-action modal-close waves-effect waves-light teal btn" data-href="{{ url_for('.delete', id=post.id) }}">确认删除</a>
+                </div>
+            </div>
+            {% elif current_user.is_administrator() %}
+            <a class="waves-effect waves-teal btn-small btn-flat" href="{{ url_for('.edit', id=post.id) }}">
+                <i class="material-icons">edit</i>[Admin]
+            </a>
+            {% endif %}
+
+            <a class="waves-effect waves-teal btn-small btn-flat right" href="{{ url_for('.post', id=post.id) }}#comments">
+                <i class="material-icons" id="collect-btn"  style="font-size: 18px">comment</i>
+                <span class="comment-num">{{ post.comments.count() }}</span>
+            </a>
+            {% if current_user.is_authenticated %}
+                {% if current_user.is_liking(post) %}
+            <a class="waves-effect waves-teal btn-small btn-flat right" id="react" data-href="{{ url_for('.react', post_id=post.id) }}" data-reaction_type="1">
+                <i class="material-icons" id="react-btn" style="font-size: 18px;">favorite</i>
+                <span id="react-num">{{ post.likers.count() }}</span>
+            </a>
+                {% else %}
+            <a class="waves-effect waves-teal btn-small btn-flat right" id="react" data-href="{{ url_for('.react', post_id=post.id) }}" data-reaction_type="0">
+                <i class="material-icons" id="react-btn" style="font-size: 18px;">favorite_border</i>
+                <span id="react-num">{{ post.likers.count() }}</span>
+            </a>
+                {% endif %}
+                {% if current_user.is_collecting(post) %}
+            <a class="waves-effect waves-teal btn-small btn-flat right" id="collect" data-href="{{ url_for('.collect', post_id=post.id) }}" data-collection_type="1">
+                <i class="material-icons" id="collect-btn"  style="font-size: 18px">star</i>
+                <span id="collect-num">{{ post.collectors.count() }}</span>
+            </a>
+                {% else %}
+            <a class="waves-effect waves-teal btn-small btn-flat right" id="collect" data-href="{{ url_for('.collect', post_id=post.id) }}" data-collection_type="0">
+                 <i class="material-icons" id="collect-btn"  style="font-size: 18px">star_border</i>
+                <span id="collect-num">{{ post.collectors.count() }}</span>
+            </a>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}MaterializedFlask - {{ user.username }}{% endblock %}
+
+{% block content %}
+<main>
+    <div class="col s12 m12 l12 " style="margin-left: 24px;">
+        <div class="row">
+            <ul class="tabs">
+                <li class="tab col s6 m6 l6 "><a href="#profile" style="font-size:1.4em;font-weight: bold;">个人资料</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="container" id="profile">
+        <div class="row">
+            <div class="col s12 m12 l12 profile">
+                <div class="card profile-card">
+                    <img class="profile-thumbnail" src="{{ user.gravatar(size=128) }}" alt="Profile Photo">
+                    <p class="">{{ user.username }}</p>
+                    <table class="highlight">
+                        {% if user.name %}
+                        <tr>
+                            <th>姓名</th>
+                            <td>{{ user.name }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if user.location %}
+                        <tr>
+                            <th>城市</th>
+                            <td><a href="http://maps.baidu.com/?q={{ user.location }}">{{ user.location }}</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <tr>
+                            <th>邮箱</th>
+                            <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if user.about_me %}
+                        <tr>
+                            <th class="about_me">关于我</th>
+                            <td>{{ user.about_me }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <th>注册时间</th>
+                            <td>{{ moment(user.member_since).format('L') }}</td>
+                        </tr>
+                        <tr>
+                            <th>最近登录</th>
+                            <td>{{ moment(user.last_seen).fromNow() }}</td>
+                        </tr>
+                    </table>
+                    <div>
+                        {% if user == current_user %}
+                        <a class="btn" href="{{ url_for('.edit_profile') }}">Edit Profile</a>
+                        {% endif %}
+                        {% if current_user.is_administrator() %}
+                        <a class="btn" href="{{ url_for('.edit_profile_admin', id=user.id) }}">Edit Profile [Admin]</a>
+                        {% endif %}
+                    </div>
+                    <div>{{ user.posts.count() }} blog posts.{{ user.comments.count() }} comments.</div>
+                    <div>
+                        {% if current_user.can(Permission.FOLLOW) and user != current_user %}
+                            {% if not current_user.is_following(user) %}
+                            <a href="{{ url_for('.follow', username=user.username) }}" class="btn btn-primary">Follow</a>
+                            {% else %}
+                            <a href="{{ url_for('.unfollow', username=user.username) }}" class="btn btn-default">Unfollow</a>
+                            {% endif %}
+                        {% endif %}
+                        <a href="{{ url_for('.followers', username=user.username) }}">Followers: <span>{{ user.followers.count() - 1 }}</span></a>
+                        <a href="{{ url_for('.followed_by', username=user.username) }}">Following: <span>{{ user.followed.count() - 1 }}</span></a>
+                        {% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %}
+                        | <span class="label label-default">Follows you</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col s12 m12 l12" style="margin-left: 24px;">
+        <div class="row">
+            <ul class="tabs">
+                <li class="tab col s6 m6 l6"><a href="#posts" style="font-size:1.4em;font-weight: bold;">我的文章</a></li>
+                <li class="tab col s6 m6 l6"><a href="#collections" style="font-size:1.4em;font-weight: bold;">我的收藏</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container" id="posts">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                {% for post in posts %}
+                {% include '_post.html' %}
+                {% endfor %}
+            </div>
+            {% if pagination %}
+            <div class="col s12 m12 l12 pagination right">
+                {{ macros.pagination_widget(pagination, '.user', username=username) }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container" id="collections">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                {% for post in user.collections.all() %}
+                {% include '_post.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+</main>
+{% endblock %}
