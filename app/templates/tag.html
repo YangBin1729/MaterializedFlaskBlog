@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}MaterializedFlask{% endblock %}
+
+{% block content %}
+<main>
+
+    <div class="row tag-list">
+        <p>分类标签：</p>
+        {% for tag in taglist %}
+        <div class="btn {% if tag.name==tagname %}teal lighten-2{% else %}transparent{% endif %}">
+            <a href="{{ url_for('.tag', tagname=tag.name) }}">{{ tag.name }}
+                <span class="badge">{{ tag.posts.count() }}</span></a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="container">
+        <div class="row">
+            {% if posts %}
+            <ul class="col s12 m12 l12 posts">
+                {% for post in posts %}
+                {% include '_post.html' %}
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if pagination %}
+            <div class="col s12 m12 l12 pagination">
+                {{ macros.pagination_widget(pagination, '.tag') }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

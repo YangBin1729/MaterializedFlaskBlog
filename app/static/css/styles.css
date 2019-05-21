@@ -12,6 +12,21 @@ header, main, footer {
     }
 }
 
+div.page-header {
+    width: 90%;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 0;
+
+}
+div.page-header p {
+    border-bottom: 1px solid #e4e4e4;
+    padding-bottom: 6px;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+
 /*顶部导航*/
 .top-nav {
     height: 60px;
@@ -53,6 +68,15 @@ div.post-content div{
     padding-bottom: 6px;
 }
 
+div.post-content .chip {
+    height: 24px;
+    line-height: 24px;
+    margin-top: 5px;
+    margin-bottom: 0;
+    font-size: 11px;
+    background-color: #f4f4f4;
+}
+
 
 div.post-author {
     font-size: 1.2em;
@@ -73,13 +97,11 @@ div.post-footer ul {
     margin-top: 0px;
 }
 
-div.post-footer a{
-}
-
 div.post-footer .waves-effect {
     background-color: #fff;
     color: #212121
-  }
+}
+
 
 
 
@@ -126,6 +148,68 @@ table th,td {
     width: 35%;
 }
 
+/*评论*/
 
+.comment-form form {
+
+}
+.comment-form .row{
+    margin-bottom: 0px;
+}
+.comment-form .input-field {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+ul.comments {
+    border-top: 1px solid #e0e0e0;
+}
+
+li.comment {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+li.comment {
+    padding: 8px;
+}
+
+div.comment-thumbnail {
+    position: absolute;
+}
+div.comment-content {
+    padding-left: 56px;
+}
+
+div.comment-date {
+    padding-top: 5px;
+    font-weight: lighter;
+}
+
+/*标签列表区*/
+div.tag-list {
+    width: 90%;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e4e4e4;
+}
+div.tag-list p {
+    border-bottom: 1px solid #e4e4e4;
+    padding-bottom: 6px;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+div.tag-list .btn {
+    border-bottom: 1px solid #e4e4e4;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+div.tag-list span.badge {
+    margin-top: 6.5px;
+    margin-left: 8px ;
+
+}
 
 

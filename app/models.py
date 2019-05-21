@@ -86,7 +86,6 @@ like = db.Table('like',
                    db.Column('post_id', db.Integer, db.ForeignKey('posts.id')))
 
 
-
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -283,8 +282,6 @@ class User(UserMixin, db.Model):
         return Post.query.join(Follow, Follow.followed_id == Post.author_id)\
             .filter(Follow.follower_id == self.id)
 
-
-
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -305,13 +302,75 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+posttags = db.Table('posttags',
+                     db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
+                     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')))
+
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    rank = db.Column(db.Integer, default=0)
+
+    def generate_rank(self):
+        rank = len(self.posts.all())
+        self.rank=rank
+        db.session.add(self)
+        db.session.commit()
+
+    @staticmethod
+    def ranks():
+        for tag in Tag.query.all():
+            tag.generate_rank()
+            db.session.add(tag)
+        db.session.commit()
+
+    def __repr__(self):
+        return '<Tag %r>' % self.name
+
+
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    rank = db.Column(db.Float, default=0, index=True)
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    tags = db.relationship('Tag',
+                           secondary=posttags,
+                           backref=db.backref('posts', lazy='dynamic'),
+                           lazy='dynamic')
+
+    @property
+    def tagstring(self):
+        return ','.join([tag.name for tag in self.tags])
+
+    def generate_rank(self):
+        likers = len(self.likers.all())
+        collectors = len(self.collectors.all())
+        comments = len(self.comments.all())
+        tag_rank = 0
+        for tag in self.tags:
+            tag.generate_rank()
+            tag_rank += tag.rank/(len(self.tags.all()))
+        rank = tag_rank * 0.3 + collectors * 0.3 + comments * 0.25 + likers * 0.15
+        self.rank = rank
+        db.session.add(self)
+        db.session.commit()
+
+    @staticmethod
+    def ranks():
+        for post in Post.query.all():
+            post.generate_rank()
+
+
+    def __repr__(self):
+        return "<Post %d>" % self.id
+
+
+
 
 
 class Comment(db.Model):

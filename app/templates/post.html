@@ -9,29 +9,34 @@
         <div class="row">
             <ul class="col s12 m12 l12 posts">
                 {% include '_post.html' %}
-                <h4 id="comments">Comments</h4>
+            </ul>
+            <ul class="col s12 m12 l12">
                 {% if current_user.can(Permission.COMMENT) %}
-                <form class="col s12" method="POST">
-                    {{ form.hidden_tag() }}
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">edit</i>
-                            {{ form.body(class="materialize-textarea") }}
-                            {{ form.body.label }}
-                            {% for error in form.body.errors %}
-                            <p>{{ error }}</p>
-                            {% endfor %}
+                <div class="comment-form">
+                    <form class="col s12" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">edit</i>
+                                {{ form.body(class="materialize-textarea") }}
+                                {{ form.body.label }}
+                                {% for error in form.body.errors %}
+                                <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                    <div class="row right">
-                        <div class="input-field col s12">
-                            <button class="btn waves-effect waves-light" type="submit" name="action">
-                                提交<i class="material-icons right">send</i>
-                            </button>
+                        <div class="row right">
+                            <div class="input-field col s12">
+                                <button class="btn-small waves-effect waves-light" type="submit" name="action">
+                                    提交<i class="material-icons right">send</i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
                 {% endif %}
+            </ul>
+            <ul class="col s12 m12 l12">
 
                 <ul class="comments">
                 {% for comment in comments %}

@@ -4,8 +4,9 @@ from flask_login import login_required, current_user
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
-from ..models import Role, User, Permission, Post, Comment
+from ..models import Role, User, Permission, Post, Comment, Tag
 from ..decorators import admin_required, permission_required
+from ..utils import generate_tags
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -15,6 +16,10 @@ def index():
     if current_user.can(Permission.WRITE) and form.validate_on_submit():
         post = Post(body=form.body.data,
                     author=current_user._get_current_object())
+        tagstring = form.tags.data
+        if tagstring:
+            tags = [generate_tags(tagname) for tagname in tagstring.split(',')]
+            post.tags = tags
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('.index'))
@@ -22,7 +27,7 @@ def index():
     pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
     posts = pagination.items
-    return render_template('index.html', form=form, posts=posts, pagination=pagination, endpoint='.index')
+    return render_template('index.html', form=form, posts=posts, pagination=pagination, endpoint='.index', title='全部')
 
 
 @main.route('/mines', methods=['GET', 'POST'])
@@ -40,7 +45,7 @@ def mines():
     pagination = query.order_by(Post.timestamp.desc()).paginate(
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
     posts = pagination.items
-    return render_template('index.html', form=form, posts=posts, pagination=pagination, endpoint='.mines')
+    return render_template('index.html', form=form, posts=posts, pagination=pagination, endpoint='.mines', title='我的')
 
 
 @main.route('/updates', methods=['GET', 'POST'])
@@ -58,7 +63,34 @@ def updates():
     pagination = query.order_by(Post.timestamp.desc()).paginate(
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
     posts = pagination.items
-    return render_template('index.html', form=form, posts=posts, pagination=pagination, endpoint='.updates')
+    return render_template('index.html', form=form, posts=posts, pagination=pagination, endpoint='.updates', title="关注")
+
+
+@main.route('/tag')
+@main.route('/tag/<string:tagname>')
+def tag(tagname=None):
+    taglist = Tag.query.all()
+    pagination = None
+    posts = None
+    if tagname:
+        tag = Tag.query.filter_by(name=tagname).first()
+        page = request.args.get('page', 1, type=int)
+        pagination = tag.posts.order_by(Post.timestamp.desc()).paginate(
+            page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+            error_out=False)
+        posts = pagination.items
+    return render_template('tag.html', taglist=taglist, tagname=tagname, posts=posts, pagination=pagination)
+
+
+@main.route('/recommended')
+def recommended():
+    Post.ranks()
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.order_by(Post.rank.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
+    posts = pagination.items
+    return render_template('recommended.html', posts=posts, pagination=pagination, endpoint='.recommended')
+
 
 
 
@@ -151,12 +183,17 @@ def edit(id):
         abort(403)
     form = PostForm()
     if form.validate_on_submit():
+        tagstring = form.tags.data
         post.body = form.body.data
+        if tagstring:
+            tags = [generate_tags(tagname) for tagname in tagstring.split(',')]
+            post.tags = tags
         db.session.add(post)
         db.session.commit()
         flash('The post has been updated.')
         return redirect(url_for('.post', id=post.id))
     form.body.data = post.body
+    form.tags.data = post.tagstring
     return render_template('edit_post.html', form=form, current_time=datetime.utcnow())
 
 

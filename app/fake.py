@@ -2,7 +2,8 @@ from random import randint
 from sqlalchemy.exc import IntegrityError
 from faker import Faker
 from . import db
-from .models import User, Post
+from .models import User, Post, Tag
+import random
 
 
 def users(count=100):
@@ -34,4 +35,16 @@ def posts(count=100):
                  timestamp=fake.past_date(),
                  author=u)
         db.session.add(p)
+    db.session.commit()
+
+
+tags = ['python', 'flask', 'javascript', 'html', 'css', 'jquery', 'web', 'machine learning', 'algorithm', 'tutorial']
+
+def tag_table():
+    posts = Post.query.order_by(Post.timestamp.desc()).limit(30).all()
+    for tag in tags:
+        tagged_posts = random.sample(posts, random.randint(4,10))
+        tag = Tag(name=tag,
+                  posts=tagged_posts)
+        db.session.add(tag)
     db.session.commit()

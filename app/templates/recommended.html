@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}MaterializedFlask{% endblock %}
+
+{% block content %}
+<main>
+    {% for message in get_flashed_messages() %}
+    <div class="container alert">
+        <div class="row">
+            <div class="col s12">
+                <div class="card-panel teal lighten-1 center">
+                    <span class="card-content white-text" style="font-size:1.2em">
+                        {{ message }}
+                    </span>
+                 </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="row page-header">
+        <p>推荐：</p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <ul class="col s12 m12 l12 posts">
+                {% for post in posts %}
+                {% include '_post.html' %}
+                {% endfor %}
+            </ul>
+            {% if pagination %}
+            <div class="col s12 m12 l12 pagination">
+                {{ macros.pagination_widget(pagination, endpoint) }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

@@ -16,6 +16,16 @@
                 {{ form.hidden_tag() }}
                 <div class="row">
                     <div class="input-field col s12">
+                        <i class="material-icons prefix">label</i>
+                        {{ form.tags(class="materialize-textarea") }}
+                        {{ form.tags.label }}
+                        {% for error in form.tags.errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
                         <i class="material-icons prefix">edit</i>
                         {{ form.body(class='materialize-textarea') }}
                         {{ form.body.label }}
