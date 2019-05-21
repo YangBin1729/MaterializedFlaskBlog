@@ -14,15 +14,15 @@ from ..utils import generate_tags
 def index():
     form=PostForm()
     if current_user.can(Permission.WRITE) and form.validate_on_submit():
-        post = Post(body=form.body.data,
+        post = Post(body=request.form['body'],
                     author=current_user._get_current_object())
-        tagstring = form.tags.data
+        tagstring = request.form['tags']
         if tagstring:
             tags = [generate_tags(tagname) for tagname in tagstring.split(',')]
             post.tags = tags
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('.index'))
+        return jsonify(html=render_template('_post.html', post=post))
     page = request.args.get('page', 1, type=int)
     pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
@@ -35,11 +35,15 @@ def index():
 def mines():
     form=PostForm()
     if current_user.can(Permission.WRITE) and form.validate_on_submit():
-        post = Post(body=form.body.data,
+        post = Post(body=request.form['body'],
                     author=current_user._get_current_object())
+        tagstring = request.form['tags']
+        if tagstring:
+            tags = [generate_tags(tagname) for tagname in tagstring.split(',')]
+            post.tags = tags
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('.mines'))
+        return jsonify(html=render_template('_post.html', post=post))
     page = request.args.get('page', 1, type=int)
     query = current_user.posts
     pagination = query.order_by(Post.timestamp.desc()).paginate(
@@ -53,11 +57,15 @@ def mines():
 def updates():
     form=PostForm()
     if current_user.can(Permission.WRITE) and form.validate_on_submit():
-        post = Post(body=form.body.data,
+        post = Post(body=request.form['body'],
                     author=current_user._get_current_object())
+        tagstring = request.form['tags']
+        if tagstring:
+            tags = [generate_tags(tagname) for tagname in tagstring.split(',')]
+            post.tags = tags
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('.mines'))
+        return jsonify(html=render_template('_post.html', post=post))
     page = request.args.get('page', 1, type=int)
     query = current_user.followed_posts
     pagination = query.order_by(Post.timestamp.desc()).paginate(
@@ -301,3 +309,13 @@ def delete(id):
     db.session.delete(post)
     db.session.commit()
     return jsonify(message='done')
+
+@main.route('/delete_comment/<int:id>', methods=['DELETE'])
+@login_required
+def delete_comment(id):
+    comment = Comment.query.filter_by(id=id).first()
+    db.session.delete(comment)
+    db.session.commit()
+    post=Post.query.filter_by(id=comment.post_id).first()
+    count=post.comments.count()
+    return jsonify(count=count)

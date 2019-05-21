@@ -40,7 +40,7 @@
             {% endif %}
 
             <a class="waves-effect waves-teal btn-small btn-flat right" href="{{ url_for('.post', id=post.id) }}#comments">
-                <i class="material-icons" id="collect-btn"  style="font-size: 18px">comment</i>
+                <i class="material-icons" id="collect-btn">comment</i>
                 <span class="comment-num">{{ post.comments.count() }}</span>
             </a>
             {% if current_user.is_authenticated %}

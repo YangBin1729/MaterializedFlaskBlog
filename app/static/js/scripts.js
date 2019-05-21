@@ -75,7 +75,7 @@ $(document).ready(function () {
         })
     });
 
-    // 文章的删除功能
+    // 删除文章
         $('a#confirm-delete-post').click(function (event) {
         let r=$(this),
             p=r.parents('div.post-card'),
@@ -89,8 +89,42 @@ $(document).ready(function () {
                 console.log(data.message);
             }
         })
+    });
+
+    // 提交文章
+    $('form.post_form').submit(function (e) {
+        let r=$(this),
+            t=$('ul.posts'),
+            data=$(this).serialize();
+        $.ajax({
+            type: 'POST',
+            data: data,
+            success: function (data) {
+                t.prepend(data.html);
+                r.find('input#tags,textarea#body').each(function() {$(this).val('')});
+            }
+        });
+        e.preventDefault();
+    });
+
+    // 删除评论
+    $('a.delete-comment').click(function () {
+        let r=$(this),
+            t=r.parents('li.comment'),
+            n=$('span.comment-num'),
+            url= r.data('href');
+        $.ajax({
+            url:url,
+            type:'DELETE',
+            success: function (data) {
+                t.remove();
+                n.text(data.count)
+            }
+        })
+
     })
 
+    // 增加评论
 
 
 })
