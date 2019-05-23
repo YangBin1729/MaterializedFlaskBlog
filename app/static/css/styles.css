@@ -36,7 +36,14 @@ div.page-header p {
 /*侧边导航*/
 .sidenav {
     width: 240px;
+}
 
+a#tools {
+    padding-left: 32px;
+}
+
+.side-nav a.tool-item {
+    padding-left: 88px;
 }
 
 
@@ -143,7 +150,7 @@ table th,td {
     padding-top: 6px;
 }
 
-.modal {
+div#delete-post {
     max-height: 40%;
     width: 35%;
 }
@@ -212,4 +219,20 @@ div.tag-list span.badge {
 
 }
 
+.fixed-action-btn{
+    right: auto;
+    margin-left: -5%;
+}
 
+
+/*日程*/
+.active-item {
+    font-size: 16px;
+    color: #000000;
+
+}
+.inactive-item {
+    font-size: 16px;
+    color: #d5d5d5;
+    text-decoration: line-through;
+}

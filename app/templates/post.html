@@ -12,8 +12,8 @@
             </ul>
             <ul class="col s12 m12 l12">
                 {% if current_user.can(Permission.COMMENT) %}
-                <div class="comment-form">
-                    <form class="col s12" method="POST">
+                <div class="">
+                    <form class="col s12 comment-form" method="POST">
                         {{ form.hidden_tag() }}
                         <div class="row">
                             <div class="input-field col s12">
@@ -45,7 +45,7 @@
                 </ul>
                 {% if pagination %}
                 <div class="pagination">
-                    {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=post.id) }}
+                    {{ macros.pagination_widget(pagination, '.post', id=post.id) }}
                 </div>
                 {% endif %}
             </ul>

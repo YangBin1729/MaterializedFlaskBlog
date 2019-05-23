@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}MaterializedFlask - Todo{% endblock %}
+
+
+{% block content %}
+
+<main class="todo">
+    <div class="container" style="padding-top: 60px">
+        <div class="row" id="todo-header">
+            <input id="item-input" data-href="{{ url_for('.new_item') }}" type="text"
+                   placeholder="{{ 'What needs to be done today?' }}" autocomplete="off" autofocus required>
+        </div>
+        <div class="row" id="dashboard">
+            <div class="col l9 m12 s21">
+                <ul class="tabs">
+                    <li class="col m4 s12">
+                        <a class="blue-text button" id="all-item">
+                            {{ 'All' }} <span class="grey-text small-text" id="all-count">{{ all_count }}</span>
+                        </a>
+                    </li>
+                    <li class="col m4 s12">
+                        <a class="blue-text button" id="active-item">
+                            {{ 'Active' }} <span class="grey-text small-text" id="active-count">{{ active_count }}</span>
+                        </a>
+                    </li>
+                    <li class="col m4 s12">
+                        <a class="blue-text button" id="completed-item">
+                            {{ 'Done' }} <span class="grey-text small-text" id="completed-count">{{ completed_count }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col l3 hide-on-med-and-down">
+                <a class="waves-effect waves-light btn red right" id="clear-btn" data-href="{{ url_for('.clear_items') }}">
+                    <i class="material-icons left">clear_all</i>Clear
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="items">
+            {% for item in items %}
+                {% include '_item.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+</main>
+{% endblock %}

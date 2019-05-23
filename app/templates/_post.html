@@ -39,30 +39,30 @@
             </a>
             {% endif %}
 
-            <a class="waves-effect waves-teal btn-small btn-flat right" href="{{ url_for('.post', id=post.id) }}#comments">
+            <a class="waves-effect waves-teal btn-small btn-flat right" href="{{ url_for('.post', id=post.id) }}">
                 <i class="material-icons" id="collect-btn">comment</i>
                 <span class="comment-num">{{ post.comments.count() }}</span>
             </a>
             {% if current_user.is_authenticated %}
                 {% if current_user.is_liking(post) %}
             <a class="waves-effect waves-teal btn-small btn-flat right" id="react" data-href="{{ url_for('.react', post_id=post.id) }}" data-reaction_type="1">
-                <i class="material-icons" id="react-btn" style="font-size: 18px;">favorite</i>
+                <i class="material-icons" id="react-btn">favorite</i>
                 <span id="react-num">{{ post.likers.count() }}</span>
             </a>
                 {% else %}
             <a class="waves-effect waves-teal btn-small btn-flat right" id="react" data-href="{{ url_for('.react', post_id=post.id) }}" data-reaction_type="0">
-                <i class="material-icons" id="react-btn" style="font-size: 18px;">favorite_border</i>
+                <i class="material-icons" id="react-btn">favorite_border</i>
                 <span id="react-num">{{ post.likers.count() }}</span>
             </a>
                 {% endif %}
                 {% if current_user.is_collecting(post) %}
             <a class="waves-effect waves-teal btn-small btn-flat right" id="collect" data-href="{{ url_for('.collect', post_id=post.id) }}" data-collection_type="1">
-                <i class="material-icons" id="collect-btn"  style="font-size: 18px">star</i>
+                <i class="material-icons" id="collect-btn">star</i>
                 <span id="collect-num">{{ post.collectors.count() }}</span>
             </a>
                 {% else %}
             <a class="waves-effect waves-teal btn-small btn-flat right" id="collect" data-href="{{ url_for('.collect', post_id=post.id) }}" data-collection_type="0">
-                 <i class="material-icons" id="collect-btn"  style="font-size: 18px">star_border</i>
+                 <i class="material-icons" id="collect-btn">star_border</i>
                 <span id="collect-num">{{ post.collectors.count() }}</span>
             </a>
                 {% endif %}

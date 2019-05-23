@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
-from ..models import Role, User, Permission, Post, Comment, Tag
+from ..models import Role, User, Permission, Post, Comment, Tag, Item
 from ..decorators import admin_required, permission_required
 from ..utils import generate_tags
 
@@ -164,18 +164,18 @@ def post(id):
     post = Post.query.get_or_404(id)
     form = CommentForm()
     if form.validate_on_submit():
-        comment = Comment(body=form.body.data,
+        comment = Comment(body=request.form['body'],
                           post=post,
                           author=current_user._get_current_object())
         db.session.add(comment)
         db.session.commit()
+        count = post.comments.count()
         flash('Your comment has been published.')
-        return redirect(url_for('.post', id=post.id, page=-1))
+        return jsonify(html=render_template('_comment.html', comment=comment, post=post),
+                       count=count,
+                       message='fuck you')
     page = request.args.get('page', 1, type=int)
-    if page == -1:
-        page = (post.comments.count() - 1) // \
-            current_app.config['FLASKY_COMMENTS_PER_PAGE'] + 1
-    pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(
+    pagination = post.comments.order_by(Comment.timestamp.desc()).paginate(
         page, per_page=current_app.config['FLASKY_COMMENTS_PER_PAGE'],
         error_out=False)
     comments = pagination.items
@@ -319,3 +319,88 @@ def delete_comment(id):
     post=Post.query.filter_by(id=comment.post_id).first()
     count=post.comments.count()
     return jsonify(count=count)
+
+
+@main.route('/app')
+@login_required
+def app():
+    all_count = Item.query.with_parent(current_user).count()
+    active_count = Item.query.with_parent(current_user).filter_by(done=False).count()
+    completed_count = Item.query.with_parent(current_user).filter_by(done=True).count()
+    return render_template('_todo.html', items=current_user.items,
+                           all_count=all_count, active_count=active_count, completed_count=completed_count)
+
+
+@main.route('/items/new', methods=['POST'])
+@login_required
+def new_item():
+    data = request.get_json()
+    print(data)
+    if data is None or data['body'].strip() == '':
+        return jsonify(message='Invalid item body'), 400
+    item = Item(body=data['body'], author=current_user._get_current_object())
+    db.session.add(item)
+    db.session.commit()
+    return jsonify(html=render_template('_item.html', item=item), message='+1')
+
+
+@main.route('/item/<int:item_id>/edit', methods=['PUT'])
+@login_required
+def edit_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    if current_user != item.author:
+        return jsonify(message='Permission denied.'), 403
+
+    data =request.get_json()
+    if data is None or data['body'].strip() == '':
+        return jsonify(message='Invalid item body.'), 400
+    item.body = data['body']
+    db.session.commit()
+    return jsonify(message='Item updated.')
+
+
+@main.route('/item/<int:item_id>/toggle', methods=['PATCH'])
+@login_required
+def toggle_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    if current_user != item.author:
+        return jsonify(message='Permission denied.'), 403
+
+    item.done = not item.done
+    db.session.commit()
+    return jsonify(message='Item toggled.')
+
+
+@main.route('/item/<int:item_id>/delete', methods=['DELETE'])
+@login_required
+def delete_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    if current_user != item.author:
+        return jsonify(message='Permission denied.'), 403
+
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify(message='Item deleted.')
+
+
+@main.route('/item/clear', methods=['DELETE'])
+@login_required
+def clear_items():
+    items = Item.query.with_parent(current_user).filter_by(done=True).all()
+    for item in items:
+        db.session.delete(item)
+    db.session.commit()
+    return jsonify(message='All clear!')
+
+
+@main.route('/test')
+@login_required
+def test():
+
+    return render_template('test.html')
+
+@main.route('/test_new_item', methods=['POST'])
+def test_new_item():
+    data = request.get_json()
+    data_html = "<a class='red-text'>" + data['body'] + current_user.id + "</a>"
+    return jsonify(html=data_html)
