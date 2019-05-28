@@ -10,6 +10,16 @@ $(document).ready(function () {
     $('.collapsible').collapsible();
 
 
+    $('.sidenav li.bold').each(function () {
+        let t = $(this).find('a'),
+            path = location.pathname,
+            href = $(t).attr('href');
+        if (href == path) {
+            $(this).addClass('active')
+        }
+    });
+
+
     // 关闭提醒消息
     $('main').on('click', '.alert', function() {
         $(this).fadeOut(300,);
@@ -387,25 +397,5 @@ $(document).ready(function () {
         });
     });
 
-    // let ENTER_KEY = 13;
-    // function new_item(e) {
-    //     let $input = $('#item-input');
-    //     let value = $input.val().trim();
-    //     if (e.which !== ENTER_KEY || !value) {
-    //         return;
-    //     }
-    //     $input.focus().val('');
-    //     let url = $input.data('href');
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: url,
-    //         data: JSON.stringify({'body': value}),
-    //         contentType: 'application/json;charset=UTF-8',
-    //         success: function (data) {
-    //             $('.items').append(data.html);
-    //         }
-    //     });
-    // }
-    // $(document).on('keyup', '#item-input', new_item.bind(this));
 
 })

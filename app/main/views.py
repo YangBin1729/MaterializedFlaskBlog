@@ -100,8 +100,6 @@ def recommended():
     return render_template('recommended.html', posts=posts, pagination=pagination, endpoint='.recommended')
 
 
-
-
 @main.route('/user/<username>')
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -392,15 +390,3 @@ def clear_items():
     db.session.commit()
     return jsonify(message='All clear!')
 
-
-@main.route('/test')
-@login_required
-def test():
-
-    return render_template('test.html')
-
-@main.route('/test_new_item', methods=['POST'])
-def test_new_item():
-    data = request.get_json()
-    data_html = "<a class='red-text'>" + data['body'] + current_user.id + "</a>"
-    return jsonify(html=data_html)

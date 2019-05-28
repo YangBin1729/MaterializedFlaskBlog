@@ -72,7 +72,7 @@
                     {% endif %}
                 </div>
             </li>
-            <li class="bold active"><a href="{{ url_for('main.index') }}"><i class="material-icons">home</i>首页</a></li>
+            <li class="bold"><a href="{{ url_for('main.index') }}"><i class="material-icons">home</i>首页</a></li>
 
             {% if current_user.is_authenticated %}
             <li class="bold"><a href="{{ url_for('main.mines') }}"><i class="material-icons">person</i>我的</a></li>
@@ -83,22 +83,7 @@
             <li><div class="divider"></div></li>
             <li class="bold"><a href="{{ url_for('main.recommended') }}"><i class="material-icons">thumb_up</i>推荐</a></li>
             <li><div class="divider"></div></li>
-            <li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li class="bold">
-                        <a class="collapsible-header waves-effect waves-teal" id="tools" tabindex="0">
-                            <i class="material-icons">build</i>工具<i class="material-icons right">arrow_drop_down</i>
-                        </a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a class="tool-item" href="{{ url_for('.app') }}"><i class="material-icons">assignment</i>日程</a></li>
-                                <li><a class="tool-item" href="#"><i class="material-icons">chat</i>聊天</a></li>
-                                <li><a class="tool-item" href="#"><i class="material-icons">videogame_asset</i>摸鱼</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
+            <li class="bold"><a class="tool-item" href="{{ url_for('.app') }}"><i class="material-icons">assignment</i>日程</a></li>
             <li><div class="divider"></div></li>
             {% endif %}
         </ul>

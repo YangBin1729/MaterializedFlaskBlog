@@ -284,6 +284,27 @@ class User(UserMixin, db.Model):
         return Post.query.join(Follow, Follow.followed_id == Post.author_id)\
             .filter(Follow.follower_id == self.id)
 
+    @property
+    def comments_count(self):
+        count=0
+        for p in self.posts:
+            count += p.comments.count()
+        return count
+
+    @property
+    def likers_count(self):
+        count=0
+        for p in self.posts:
+            count += p.likers.count()
+        return count
+
+    @property
+    def collectors_count(self):
+        count=0
+        for p in self.posts:
+            count += p.collectors.count()
+        return count
+
     def __repr__(self):
         return '<User %r>' % self.username
 
