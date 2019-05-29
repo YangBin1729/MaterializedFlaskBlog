@@ -24,7 +24,7 @@
                             {% if not current_user.is_following(user) %}
                             <div class="btn-small transparent right"><a href="{{ url_for('.follow', username=user.username) }}" >关注</a></div>
                             {% else %}
-                            <div class="btn-small transparent right"><a href="{{ url_for('.unfollow', username=user.username) }}" >取关</a></div>
+                            <div class="btn-small transparent right"><a href="{{ url_for('.unfollow', username=user.username) }}" >已关注</a></div>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -67,24 +67,30 @@
                         </tr>
                     </table>
                     </div>
-                    <div class="profile-status">
-                        <div class="btn-small transparent"><a>已发布博客<span class="badge">{{ user.posts.count() }}</span></a></div>
-                        <div class="btn-small transparent"><a>收到评论<span class="badge">{{ user.comments_count }}</span></a></div>
-                        <div class="btn-small transparent"><a>被赞<span class="badge">{{ user.likers_count }}</span></a></div>
-                        <div class="btn-small transparent"><a>被收藏<span class="badge">{{ user.collectors_count }}</span></a></div>
-                        <div class="btn-small transparent"><a>已发布评论<span class="badge">{{ user.comments.count() }}</span></a></div>
-                        <div class="btn-small transparent"><a>收藏<span class="badge">{{ user.collections.count() }}</span></a></div>
-                        <div class="btn-small transparent"><a>已赞<span class="badge">{{ user.liked_posts.count() }}</span></a></div>
-                        <div class="btn-small transparent">
-                            <a href="{{ url_for('.followers', username=user.username) }}">关注<span class="badge">{{ user.followers.count() - 1 }}</span></a>
-                        </div>
-                        <div class="btn-small transparent">
-                            <a href="{{ url_for('.followed_by', username=user.username) }}">被关注<span class="badge">{{ user.followed.count() - 1 }}</span></a>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="row tag-list">
+        <p>{% if user == current_user %}我的{% else %}他的{% endif %}活动</p>
+        <div class="container profile-status">
+            <div class="btn-small transparent"><a>已发布博客<span class="badge">{{ user.posts.count() }}</span></a></div>
+            <div class="btn-small transparent"><a>收到评论<span class="badge">{{ user.comments_count }}</span></a></div>
+            <div class="btn-small transparent"><a>被赞<span class="badge">{{ user.likers_count }}</span></a></div>
+            <div class="btn-small transparent"><a>被收藏<span class="badge">{{ user.collectors_count }}</span></a></div>
+            <div class="btn-small transparent"><a>已发布评论<span class="badge">{{ user.comments.count() }}</span></a></div>
+            <div class="btn-small transparent"><a>收藏<span class="badge">{{ user.collections.count() }}</span></a></div>
+            <div class="btn-small transparent"><a>已赞<span class="badge">{{ user.liked_posts.count() }}</span></a></div>
+            <div class="btn-small transparent">
+                <a href="{{ url_for('.followers', username=user.username) }}">关注<span class="badge">{{ user.followers.count() - 1 }}</span></a>
+            </div>
+            <div class="btn-small transparent">
+                <a href="{{ url_for('.followed_by', username=user.username) }}">被关注<span class="badge">{{ user.followed.count() - 1 }}</span></a>
+            </div>
+        </div>
+
     </div>
 
 

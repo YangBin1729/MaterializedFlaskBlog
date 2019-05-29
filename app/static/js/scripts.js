@@ -1,6 +1,14 @@
 $(document).ready(function () {
 
-    $(".dropdown-trigger").dropdown();
+    $(".dropdown-trigger").dropdown({
+        inDuration: 300,
+        outDuration: 225,
+        constrain_width: false, // Does not change width of dropdown to that of the activator
+        hover: false, // Activate on click
+        alignment: "right", // Aligns dropdown to left or right edge (works with constrain_width)
+        gutter: 0, // Spacing from edge
+        belowOrigin: true,
+    });
     $('select').formSelect();
     $('.sidenav').sidenav();
     $('.user-tabs').tabs();
@@ -14,7 +22,7 @@ $(document).ready(function () {
         let t = $(this).find('a'),
             path = location.pathname,
             href = $(t).attr('href');
-        if (href == path) {
+        if (path.indexOf(href) != '-1') {
             $(this).addClass('active')
         }
     });

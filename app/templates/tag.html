@@ -9,7 +9,7 @@
     <div class="row tag-list">
         <p>分类标签：</p>
         {% for tag in taglist %}
-        <div class="btn {% if tag.name==tagname %}teal lighten-2{% else %}transparent{% endif %}">
+        <div class="btn {% if tag.name==tagname %}red lighten-2{% else %}transparent{% endif %}">
             <a href="{{ url_for('.tag', tagname=tag.name) }}">{{ tag.name }}
                 <span class="badge">{{ tag.posts.count() }}</span></a>
         </div>

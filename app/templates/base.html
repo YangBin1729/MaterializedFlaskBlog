@@ -30,24 +30,27 @@
     <header>
         <!-- LoggedUser Dropdown Structure -->
         <ul id="dropdown1" class="dropdown-content">
-            <li><a href="{{ url_for('auth.change_password') }}">修改密码</a></li>
-            <li><a href="{{ url_for('auth.password_reset_request') }}">重置密码</a></li>
-            <li><a href="{{ url_for('auth.change_email_request') }}">修改邮箱</a></li>
-            <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
+            <li><a href="{{ url_for('auth.change_password') }}"><i class="material-icons">lock</i>修改密码</a></li>
+            <li><a href="{{ url_for('auth.password_reset_request') }}"><i class="material-icons">lock_outline</i>重置密码</a></li>
+            <li><a href="{{ url_for('auth.change_email_request') }}"><i class="material-icons">email</i>修改邮箱</a></li>
+            <li><a href="{{ url_for('auth.logout') }}"><i class="material-icons">exit_to_app</i>退出</a></li>
         </ul>
 
         <nav class="top-nav">
             <div class="container">
                 <div class="nav-wrapper">
-                    <a href="{{ url_for('main.index') }}" class="brand-logo"><i class="material-icons">cloud</i>MFlask</a>
+                    <a href="{{ url_for('main.index') }}" class="brand-logo">
+                        <img src="{{ url_for('static', filename='images/materialize-logo.png') }}" alt="MaterializedFlask">
+                    </a>
                     <ul class="right hide-on-med-and-down">
                         {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+                        <li><a href="{{ url_for('main.user', username=current_user.username) }}"><i class="material-icons">face</i></a></li>
                         <!-- LoggedUser Dropdown Trigger -->
-                        <li><a class="dropdown-trigger" href="" data-target="dropdown1">设置<i class="material-icons right">arrow_drop_down</i></a></li>
+                        <li><a class="dropdown-trigger" href="" data-target="dropdown1"><i class="material-icons">settings</i></a></li>
+
                         {% else %}
-                        <li><a href="{{ url_for('auth.register') }}"><i class="material-icons left">view_module</i>注册</a></li>
-                        <li><a href="{{ url_for('auth.login') }}"><i class="material-icons left">view_module</i>登录</a></li>
+                        <li><a href="{{ url_for('auth.register') }}"><i class="material-icons left">person_add</i>注册</a></li>
+                        <li><a href="{{ url_for('auth.login') }}"><i class="material-icons left">input</i>登录</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -83,7 +86,7 @@
             <li><div class="divider"></div></li>
             <li class="bold"><a href="{{ url_for('main.recommended') }}"><i class="material-icons">thumb_up</i>推荐</a></li>
             <li><div class="divider"></div></li>
-            <li class="bold"><a class="tool-item" href="{{ url_for('.app') }}"><i class="material-icons">assignment</i>日程</a></li>
+            <li class="bold"><a class="tool-item" href="{{ url_for('main.app') }}"><i class="material-icons">assignment</i>日程</a></li>
             <li><div class="divider"></div></li>
             {% endif %}
         </ul>
@@ -108,17 +111,26 @@
 
                 <div class="col l4 s12 center">
                     <h5 class="white-text">学习交流</h5>
+                    <ul>
+                        <li><a class="white-text" target="_blank" href="https://developer.mozilla.org/zh-CN/docs/Web">MDN</a></li>
+                        <li><a class="white-text" target="_blank" href="http://www.w3school.com.cn/">W3school</a></li>
+                        <li><a class="white-text" target="_blank" href=" https://www.runoob.com/">菜鸟教程</a></li>
+                    </ul>
                 </div>
 
                 <div class="col l4 s12 center" style="overflow: hidden;">
-                    <h5 class="white-text">联系我们</h5>
+                    <h5 class="white-text">联系我</h5>
+                    <ul>
+                        <li><a class="white-text" target="_blank" href="mailto:yangwen11514@sina.cn">邮箱</a></li>
+                        <li><a class="white-text" target="_blank" href="https://github.com/YangBin1729">GitHub</a></li>
+                    </ul>
                 </div>
 
             </div>
         </div>
         <div class="footer-copyright">
             <div class="container">
-                © 2014-2016 Materialize, All rights reserved.
+                © 2018-2019 MaterializedFlaskBlog.
                 <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT License</a>
             </div>
         </div>

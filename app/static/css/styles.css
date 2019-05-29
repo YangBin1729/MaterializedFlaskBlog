@@ -32,6 +32,13 @@ div.page-header p {
     height: 60px;
 }
 
+ul#dropdown1 {
+    top: -60px;
+}
+
+ul#dropdown1 li i {
+    margin-right: 6px;
+}
 
 /*侧边导航*/
 .sidenav {
@@ -128,7 +135,7 @@ div.profile-card {
 }
 
 div.profile-header {
-    border-bottom: 1px solid #eeeeee;
+
     margin-top: 0;
     margin-bottom: 20px;
 }
@@ -265,3 +272,5 @@ div.tag-list span.badge {
     color: #d5d5d5;
     text-decoration: line-through;
 }
+
+

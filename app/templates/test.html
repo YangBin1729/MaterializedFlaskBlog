@@ -8,9 +8,99 @@
 
 <main>
     <div class="container">
-        <div class="row" id="todo-header">
-            <input id="item-input" data-href="{{ url_for('.new_item') }}" type="text"
-                   placeholder="{{ 'What needs to be done today?' }}" autocomplete="off" autofocus required>
+        <div class="row grid">
+            <div class="col l8 m8 s12">
+               <div class="card profile-card">
+                    <div class="profile-header">
+                        <a class="profile-name">yangbin</a>
+
+                        <div class="btn-small transparent right"><a href="{{ url_for('.edit_profile') }}">编辑资料</a></div>
+
+
+
+                            <div class="btn-small transparent right"><a href="{{ url_for('.follow', username=current_user.username) }}" >关注</a></div>
+
+                            <div class="btn-small transparent right"><a href="{{ url_for('.unfollow', username=current_user.username) }}" >已关注</a></div>
+
+
+                    </div>
+
+
+                    <img class="profile-thumbnail" src="{{ current_user.gravatar(size=128) }}" alt="Profile Photo">
+                    <div class="profile-table">
+                        <table class="highlight">
+                        {% if current_user.name %}
+                        <tr>
+                            <th>姓名</th>
+                            <td>{{ current_user.name }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if current_user.location %}
+                        <tr>
+                            <th>城市</th>
+                            <td><a href="http://maps.baidu.com/?q={{current_user.location }}">{{ current_user.location }}</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if current_user.is_authenticated %}
+                        <tr>
+                            <th>邮箱</th>
+                            <td><a href="mailto:{{ current_user.email }}">{{ current_user.email }}</a></td>
+                        </tr>
+                        {% endif %}
+                        {% if current_user.about_me %}
+                        <tr>
+                            <th class="about_me">关于我</th>
+                            <td>{{ current_user.about_me }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <th>注册时间</th>
+                            <td>{{ moment(current_user.member_since).format('L') }}</td>
+                        </tr>
+                        <tr>
+                            <th>最近登录</th>
+                            <td>{{ moment(current_user.last_seen).fromNow() }}</td>
+                        </tr>
+                    </table>
+                    </div>
+
+               </div>
+            </div>
+
+
+
+
+
+
+
+
+
+            <div class="col l4 m4 s12">
+                <ul class="card collection with-header">
+                    <li class="collection-header"><h5>我的活动</h5></li>
+                    <li class="collection-item">
+                        <a>已发布博客<span>5</span></a>
+                    </li>
+                    <li class="collection-item">
+                        <div><a>收到评论<span class="badge">5</span></a></div>
+                    </li>
+                    <li class="collection-item">
+                        <div ><a>被赞<span class="badge">8</span></a></div>
+                    </li>
+                    <li class="collection-item">
+                        <div><a>被收藏<span class="badge">7</span></a></div>
+                    </li>
+                    <li class="collection-item">
+                        <div><a>已发布评论<span class="badge">5</span></a></div>
+                    </li>
+                    <li class="collection-item">
+                        <div><a>收藏<span class="badge">7</span></a></div>
+                    </li>
+                    <li class="collection-item">
+                        <div><a>已赞<span class="badge">9</span></a></div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
